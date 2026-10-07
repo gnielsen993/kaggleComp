@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Outputs
+submission*.csv
+*.pkl
+*.joblib
+*.h5
+models/
+outputs/
+
+# Kaggle / editors / OS
+kaggle.json
+.vscode/
+.idea/
+.DS_Store
