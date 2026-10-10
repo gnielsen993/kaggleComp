@@ -8,6 +8,11 @@ Shared repo for the Kaggle Titanic competition (CS 4320).
   Features: `PassengerId, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked`.
 - `test.csv` - 418 unlabeled passengers used to generate the submission.
 
+## Notebook
+
+- `titanic.ipynb` - shared working notebook. Checkpoint 1 (load, explore, preprocess, most-frequent baseline) is done; Kaggle public score 0.62200, screenshot in `checkpoint1_score.png`.
+- Run with `jupyter lab` from this folder. Writes `submission.csv` (gitignored).
+
 ## Submission format
 
 A CSV with exactly two columns, one row per `PassengerId` in `test.csv`:
