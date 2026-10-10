@@ -7,8 +7,6 @@ Shared repo for the Kaggle Titanic competition (CS 4320).
 - `train.csv` - 891 labeled passengers. Target column is `Survived` (0/1).
   Features: `PassengerId, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked`.
 - `test.csv` - 418 unlabeled passengers used to generate the submission.
-  Download it from the competition data page and place it next to `train.csv`:
-  https://www.kaggle.com/competitions/titanic/data
 
 ## Submission format
 
