@@ -13,6 +13,11 @@ Shared repo for the Kaggle Titanic competition (CS 4320).
 - `titanic.ipynb` - shared working notebook. Checkpoint 1 (load, explore, preprocess, most-frequent baseline) is done; Kaggle public score 0.62200, screenshot in `checkpoint1_score.png`.
 - Run with `jupyter lab` from this folder. Writes `submission.csv` (gitignored).
 
+## Course reference assets
+
+- `assets/template.ipynb` - optional course project submission template.
+- `assets/sample.html` - example final project notebook exported as HTML.
+
 ## Submission format
 
 A CSV with exactly two columns, one row per `PassengerId` in `test.csv`:
