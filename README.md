@@ -2,6 +2,10 @@
 
 Shared repo for the Kaggle Titanic competition (CS 4320).
 
+## Course requirements
+
+See [Course project requirements](docs/COURSE_REQUIREMENTS.md) for the Kaggle milestones, grading weights and deadlines, AI vibe coding project deliverables, and shared presentation guidance. The vibe coding project must solve a separate machine learning problem and cannot be another Kaggle competition.
+
 ## Data
 
 - `train.csv` - 891 labeled passengers. Target column is `Survived` (0/1).
@@ -15,8 +19,8 @@ Shared repo for the Kaggle Titanic competition (CS 4320).
 
 ## Course reference assets
 
-- `assets/template.ipynb` - optional course project submission template.
-- `assets/sample.html` - example final project notebook exported as HTML.
+- [Template notebook](assets/template.ipynb) - optional course project submission template.
+- [Sample final report](assets/sample.html) - example final project notebook exported as HTML.
 
 ## Submission format
 
