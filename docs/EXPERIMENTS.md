@@ -8,14 +8,15 @@ Updated November 14, 2026. Only successful Kaggle uploads count toward the six r
 | --- | --- | --- | --- |
 | Dummy | Predict the majority class, 0 | 0.62200 | [Checkpoint 1 screenshot](../checkpoint1_score.png) |
 | Non-dummy 1 | Logistic regression | 0.76794 | [Checkpoint 2 screenshot](../Submission2.png) |
-| Non-dummy 2 | Random forest, 200 trees, depth 5 | 0.77751 | [Checkpoint 2 screenshot](../Submission2.png) |
+| Non-dummy 2 | Random forest, 200 trees, depth 5 | 0.77751 | [Original checkpoint 2 screenshot](../assets/originals/Submission2.png) |
 | Non-dummy 3 | Gradient boosting, 200 stages, depth 3, minimum leaf size 10 | 0.76315 | [Submission 3 screenshot](../assets/submission_03_score.png) |
 | Non-dummy 4 | Cleaned random forest; search retained depth 5, leaf size 1 | 0.77511 | [Submission 4 screenshot](../assets/submission_04_score.png) |
 | Non-dummy 5 | Logistic regression, C=10, no class weighting | 0.77033 | [Submission 5 screenshot](../assets/submission_05_score.png) |
+| Non-dummy 6 | Compact-feature random forest ablation | 0.77990 | [Submission 6 screenshot](../assets/submission_06_score.png) |
 
 The notebook originally reported holdout accuracies of 0.8547 and 0.8324 for logistic regression and random forest. Those runs imputed before splitting; the historical validation numbers have that limitation. Newly generated `_clean` CSVs use corrected preprocessing and are not the original uploaded files.
 
-**Confirmed non-dummy submissions: 5 of 6.**
+**Confirmed non-dummy submissions: 6 of 6. The required upload count is met.**
 
 ## Refreshed local comparison
 
@@ -182,7 +183,7 @@ We **retain the baseline as the overall winner**. It reproduces submission 4 exa
 
 For the retained baseline, grouped permutation importance shows the strongest reliance on Sex/Name/Title: average accuracy drops by **25.59 percentage points** when that group is shuffled. Family counts and their derived fields follow at **3.68 points**. Passenger class drops 1.01, age 0.77, embarkation 0.23, and fare 0.04 points. Correlated groups can substitute for one another, so low importance does not prove a feature can be removed without loss. These describe model reliance, not causal effects, and are not individual passenger explanations.
 
-The compact candidate's reused holdout accuracy is **0.8212**, precision 0.8033, recall 0.7101, F1 0.7538, ROC-AUC 0.8611, and average precision 0.8357. Its counts are TN=98, FP=12, FN=20, TP=49. This diagnostic does not overturn development selection. Its final CSV changes **2 of 418 labels** relative to submission 4 and predicts 162 survivors. The Kaggle score is unknown until upload.
+The compact candidate's reused holdout accuracy is **0.8212**, precision 0.8033, recall 0.7101, F1 0.7538, ROC-AUC 0.8611, and average precision 0.8357. Its counts are TN=98, FP=12, FN=20, TP=49. This diagnostic does not overturn development selection. Its final CSV changes **2 of 418 labels** relative to submission 4 and predicts 162 survivors. The completed Kaggle upload scored **0.77990**.
 
 ### Interpretation protocol
 
@@ -197,16 +198,20 @@ Grouped permutation accuracy drops were measured on each validation fold using t
 | Embarkation | 0.0023 | 0.0048 |
 | Fare | 0.0004 | 0.0055 |
 
-### Prepared submission 6
+### Completed submission 6
 
 - File: `submission_06_feature_comparison.csv` (generated, gitignored).
-- Status: **prepared, not uploaded**; Kaggle score unknown. Confirmed count remains **5 of 6**.
+- Status: **successfully uploaded and scored**. Confirmed count is **6 of 6**.
+- Upload date: November 14, 2026 (screenshot supplied by Gabe).
+- Kaggle score: **0.77990**.
+- Evidence: [Submission 6 screenshot](../assets/submission_06_score.png).
 - Upload candidate: **compact**, the strongest non-baseline alternative by development accuracy; overall winner remains **baseline**. This delivery choice was made after the comparison to avoid uploading an exact duplicate of submission 4 and is not a newly claimed predeclared rule.
 - Predictions: 418 ordered binary labels, 162 predicted survivors, 2 labels different from submission 4.
 - CSV SHA-256: `5a9d368108b4deb45559e59ead25c4d88d2bd681764516efd9e29958459cbcbb`.
 - Full search, feature lists, encoded widths, fold scores, diagnostics, grouped importance measurements, settings, and hashes: `outputs/experiment_06.json`.
-- After successful scoring, save screenshot evidence and update the count. Generating a candidate does not satisfy the upload requirement.
+
+Submission 6 is the highest recorded Kaggle result: 0.479 percentage points above submission 4 (0.77511) and 0.239 points above the historical forest (0.77751). Compact still scored lower in development CV, so the observed leaderboard gain does not establish general superiority or change the original validation result. Only two predictions differ from submission 4.
 
 ### Remaining course coverage
 
-The prepared sixth submission still needs a successful Kaggle upload. The report now covers multiple model families, regularization, forest tuning, feature engineering/subset comparisons, classification metrics, error counts, and grouped model interpretation. Finish the final conclusions, team-authored AI usage reflection, presentation, and a fresh notebook run before hand-in. The separate AI vibe coding project remains a separate deliverable.
+The six successful non-dummy uploads are documented. The report now covers multiple model families, regularization, forest tuning, feature engineering/subset comparisons, classification metrics, error counts, and grouped model interpretation. Finish the final conclusions, team-authored AI usage reflection, presentation, and a fresh notebook run before hand-in. The separate AI vibe coding project remains a separate deliverable.
