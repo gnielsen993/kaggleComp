@@ -30,13 +30,19 @@
 
 ## Task 2: Prepare the next submission
 
-- [ ] Compare a modest gradient boosting experiment with existing baselines using identical development CV folds and features.
-- [ ] Record configuration, CV mean/spread, diagnostic holdout accuracy, and selection rationale in the notebook and `docs/EXPERIMENTS.md`.
-- [ ] Fit the selected candidate on all labeled rows and write `submission_03_*.csv` locally with validation checks.
-- [ ] Reexecute the full notebook, verify CSV contents, audit dependencies, review changes, and commit/push verified work.
+- [x] Compare a modest gradient boosting experiment with existing baselines using identical development CV folds and features.
+- [x] Record configuration, CV mean/spread, diagnostic holdout accuracy, and selection rationale in the notebook and `docs/EXPERIMENTS.md`.
+- [x] Fit the selected candidate on all labeled rows and write `submission_03_*.csv` locally with validation checks.
+- [x] Reexecute the full notebook, verify CSV contents, audit dependencies, review changes, and commit/push verified work.
 
 ## Execution notes
 
 The repo has no GSD roadmap; GSD quick is not applicable. Work proceeds inline under this plan. The user authorized the implementation, so no additional plan approval is needed. Global repo defaults authorize committing and pushing verified changes; no Kaggle upload is performed without a concrete user instruction.
 
 Task 1 validation: four unittest cases passed; all seven code cells executed in a fresh kernel and the HTML report rendered. Reviewed the EDA plot. Development CV: dummy 0.6166, logistic regression 0.8216, random forest 0.8329. Updated bundled pip after the dependency audit flagged it.
+
+Task 2 validation: all ten code cells executed in order in a fresh kernel, with no errors; HTML preview rendered. Independently checked CSV schema, 418 rows, test ID order, binary/nonmissing predictions, and identical SHA-256 across full reruns. AST checks and local Markdown links passed. Dependency audit reports no known vulnerabilities.
+
+Decision: retain the selected gradient boosting configuration as an experimental third submission even though it trails random forest by 0.42 CV percentage points. The report explicitly rejects an improvement claim. Cost: it may also score lower on Kaggle, but the experiment remains useful course evidence. No additional search was conducted after examining the result.
+
+Final review: independent read-only reviewer approved with no findings; confirmed pipelines, selection protocol, historical evidence, output integrity, and passing tests. No Kaggle upload performed.
