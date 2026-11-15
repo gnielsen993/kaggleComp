@@ -212,6 +212,6 @@ Grouped permutation accuracy drops were measured on each validation fold using t
 
 Submission 6 is the highest recorded Kaggle result: 0.479 percentage points above submission 4 (0.77511) and 0.239 points above the historical forest (0.77751). Compact still scored lower in development CV, so the observed leaderboard gain does not establish general superiority or change the original validation result. Only two predictions differ from submission 4.
 
-### Remaining course coverage
+### Final report status
 
-The six successful non-dummy uploads are documented. The report now covers multiple model families, regularization, forest tuning, feature engineering/subset comparisons, classification metrics, error counts, and grouped model interpretation. Finish the final conclusions, team-authored AI usage reflection, presentation, and a fresh notebook run before hand-in. The separate AI vibe coding project remains a separate deliverable.
+The six successful non-dummy uploads are documented. The report now covers multiple model families, regularization, forest tuning, feature engineering/subset comparisons, classification metrics, error counts, and grouped model interpretation. The final notebook now includes a consolidated results table, overall conclusions, limitations, proposed future experiments, inline helper definitions, and embedded score evidence. The final build runs it in isolation using only the input CSVs and installed packages, then packages the reproducible report. The project-wide AI usage document, presentation, and separate AI vibe coding project remain separate deliverables.
