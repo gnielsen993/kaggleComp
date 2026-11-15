@@ -135,7 +135,7 @@ Survived=1 is the positive class. Label metrics use predictions; ROC-AUC and ave
 | Gradient boosting (selected) | 0.8287 | 0.8049 | 0.7363 | 0.7676 | 0.8886 | 0.8635 |
 | Logistic regression (selected) | 0.8231 | 0.7894 | 0.7400 | 0.7626 | 0.8669 | 0.8558 |
 
-The majority-class dummy detects no survivors despite 0.6166 accuracy. Gradient boosting leads the ranking metrics while forest leads accuracy, illustrating that ranking scores and fixed class decisions measure different behavior. F1 is neither ROC-AUC nor average precision. The notebook also records training scores and per-fold fit/score time: selected logistic fitting took about 0.009 seconds, versus 0.126 for forest in this run. These small-dataset, machine-specific timings are not general speed claims; score time includes all six metrics.
+The majority-class dummy detects no survivors despite 0.6166 accuracy. Gradient boosting leads the ranking metrics while forest leads accuracy, illustrating that ranking scores and fixed class decisions measure different behavior. F1 is neither ROC-AUC nor average precision. The notebook also records training scores and per-fold fit/score time: selected logistic fitting took about 0.009 seconds, versus 0.126 for forest in the initial submission 5 run. These small-dataset, machine-specific timings are not general speed claims; score time includes all six metrics.
 
 ### Reused holdout diagnostics
 
@@ -156,6 +156,57 @@ Selected logistic accuracy is 0.8547, precision 0.8413, recall 0.7681, F1 0.8030
 
 The observed Kaggle score is 0.478 percentage points below submission 4 (0.77511) and 0.718 points below the historical forest (0.77751). It is 0.239 points above the historical logistic result (0.76794), but that earlier upload used different preprocessing, so the difference does not isolate regularization. The cleaned C=1 logistic control has no separately recorded Kaggle score. Forest remains our leading approach; submission 5 contributes the documented regularization and evaluation analysis.
 
+## Experiment 6: feature comparison and grouped interpretation
+
+**Question:** Which predefined feature set works best with the existing forest, and which inputs does it rely on?
+
+Keep 200 trees, depth 5, minimum leaf size 1, seed 42, and the same five development folds. Fit imputation and encoding within each training fold. Compare four sets defined before execution; select highest mean accuracy, breaking exact ties by fewer input columns and then listed order.
+
+- **basic:** Pclass, Age, SibSp, Parch, Fare, Sex, Embarked (7 columns).
+- **compact:** Pclass, Age, Fare, FamilySize, IsAlone, Sex, Embarked, Title (8 columns).
+- **baseline:** compact plus SibSp and Parch (10 columns; original order retained).
+- **extended:** baseline plus HasCabin, Deck, FarePerPerson (13 columns).
+
+HasCabin records a nonempty cabin string; Deck is the first letter or Unknown. FarePerPerson = Fare / FamilySize is a proxy because family size need not equal ticket party size. Features are row-local and label-free. These compare bundles, so they do not isolate every added field. Keeping the forest's default max_features="sqrt" means changing encoded width also changes the number of split candidates.
+
+| Set | Train accuracy | CV accuracy | Fold SD | Precision | Recall | F1 |
+| --- | --- | --- | --- | --- | --- | --- |
+| basic | 0.8631 | 0.8174 | 0.0260 | 0.8274 | 0.6628 | 0.7351 |
+| compact | 0.8539 | 0.8244 | 0.0213 | 0.8082 | 0.7141 | 0.7569 |
+| baseline | 0.8473 | 0.8329 | 0.0231 | 0.8093 | 0.7398 | 0.7723 |
+| extended | 0.8704 | 0.8217 | 0.0289 | 0.7987 | 0.7218 | 0.7568 |
+
+The baseline wins at **0.8329 mean CV accuracy**. Compact scores **0.8244**, extended **0.8217**, and basic **0.8174**. The baseline exceeds basic by 1.55 percentage points, suggesting the engineered title/family bundle helps in this experiment. Removing separate sibling/spouse and parent/child counts reduces accuracy by 0.85 points, even though compact retains their sum through FamilySize and IsAlone. Adding the cabin/fare bundle reduces accuracy by 1.12 points while increasing training accuracy from 0.8473 to 0.8704, consistent with extra fit that does not transfer to these validation folds. These small, selected comparisons do not establish statistical significance or isolate individual features.
+
+We **retain the baseline as the overall winner**. It reproduces submission 4 exactly, so after seeing the results we chose the highest-scoring non-baseline set, **compact**, for a distinct sixth ablation upload. This is an explicit delivery adjustment, not a claim that compact won the comparison. We added no configurations and used no holdout or Kaggle score to choose it. The purpose is to report what happened when we removed information, including the negative result.
+
+For the retained baseline, grouped permutation importance shows the strongest reliance on Sex/Name/Title: average accuracy drops by **25.59 percentage points** when that group is shuffled. Family counts and their derived fields follow at **3.68 points**. Passenger class drops 1.01, age 0.77, embarkation 0.23, and fare 0.04 points. Correlated groups can substitute for one another, so low importance does not prove a feature can be removed without loss. These describe model reliance, not causal effects, and are not individual passenger explanations.
+
+The compact candidate's reused holdout accuracy is **0.8212**, precision 0.8033, recall 0.7101, F1 0.7538, ROC-AUC 0.8611, and average precision 0.8357. Its counts are TN=98, FP=12, FN=20, TP=49. This diagnostic does not overturn development selection. Its final CSV changes **2 of 418 labels** relative to submission 4 and predicts 162 survivors. The Kaggle score is unknown until upload.
+
+### Interpretation protocol
+
+Grouped permutation accuracy drops were measured on each validation fold using the baseline model fitted only on the other four folds. Ten seeded shuffles per group per fold produce 50 measurements. Sex/Name are shuffled together and SibSp/Parch together; derived features are recomputed. Other groups are Pclass, Age, Fare, and Embarked. The selected baseline does not use Cabin, so it has no cabin importance measurement. Within-group relationships are preserved; correlations across groups can still be broken. Standard deviations describe permutations/folds and are not confidence intervals. Importance explains the retained baseline, not the compact upload candidate. No further feature selection was based on it.
+
+| Information group | Mean accuracy drop | SD |
+| --- | --- | --- |
+| Sex and name/title | 0.2559 | 0.0433 |
+| Family counts | 0.0368 | 0.0187 |
+| Passenger class | 0.0101 | 0.0128 |
+| Age | 0.0077 | 0.0078 |
+| Embarkation | 0.0023 | 0.0048 |
+| Fare | 0.0004 | 0.0055 |
+
+### Prepared submission 6
+
+- File: `submission_06_feature_comparison.csv` (generated, gitignored).
+- Status: **prepared, not uploaded**; Kaggle score unknown. Confirmed count remains **5 of 6**.
+- Upload candidate: **compact**, the strongest non-baseline alternative by development accuracy; overall winner remains **baseline**. This delivery choice was made after the comparison to avoid uploading an exact duplicate of submission 4 and is not a newly claimed predeclared rule.
+- Predictions: 418 ordered binary labels, 162 predicted survivors, 2 labels different from submission 4.
+- CSV SHA-256: `5a9d368108b4deb45559e59ead25c4d88d2bd681764516efd9e29958459cbcbb`.
+- Full search, feature lists, encoded widths, fold scores, diagnostics, grouped importance measurements, settings, and hashes: `outputs/experiment_06.json`.
+- After successful scoring, save screenshot evidence and update the count. Generating a candidate does not satisfy the upload requirement.
+
 ### Remaining course coverage
 
-One more successful non-dummy upload is required. Classification metrics, error analysis, and linear regularization are now implemented. Submission 6 is proposed as a controlled feature-selection/engineering comparison with interpretation; it has not been run. Continue using development validation for selection and accuracy as the competition metric, then finish the conclusions and AI usage reflection.
+The prepared sixth submission still needs a successful Kaggle upload. The report now covers multiple model families, regularization, forest tuning, feature engineering/subset comparisons, classification metrics, error counts, and grouped model interpretation. Finish the final conclusions, team-authored AI usage reflection, presentation, and a fresh notebook run before hand-in. The separate AI vibe coding project remains a separate deliverable.
