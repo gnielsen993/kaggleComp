@@ -19,6 +19,7 @@ See [Course project requirements](docs/COURSE_REQUIREMENTS.md) for the Kaggle mi
 - [titanic_features.py](titanic_features.py) and [titanic_models.py](titanic_models.py) contain reusable feature engineering, model pipelines, and submission checks.
 - [Experiment record](docs/EXPERIMENTS.md) tracks four confirmed non-dummy uploads. Gradient boosting scored 0.76315 on November 14; random forest remains the best recorded Kaggle result at 0.77751. Two more non-dummy submissions are required.
 - Submission 4 compared nine random forest depth/leaf settings. The existing depth-5/leaf-1 control won at 0.8329 mean CV accuracy; the selected predictions are identical to the cleaned control. Its uploaded file, `submission_04_random_forest_tuned.csv`, scored **0.77511** on November 14; [score evidence](assets/submission_04_score.png) is saved.
+- Submission 5 is **prepared, not yet uploaded**: logistic regression selected C=10 with no class weighting from ten configurations. Mean CV accuracy is 0.8231 versus the cleaned control's 0.8216; only one test label changes. The notebook adds precision, recall, F1, ROC-AUC, average precision, confusion matrices, curves, and timing. Upload `submission_05_logistic_regularized.csv` and record its score before counting it.
 
 ## Setup and execution
 
@@ -38,7 +39,7 @@ Select the environment's Python kernel and run all cells in order. To run the en
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The runner saves executed notebook outputs and a self-contained preview at `outputs/titanic.html`. It regenerates `submission.csv`, `submission_logistic_clean.csv`, `submission_forest_clean.csv`, `submission_03_gradient_boosting.csv`, and `submission_04_random_forest_tuned.csv` in the repo root, plus experiment metadata at `outputs/experiment_03.json` and `outputs/experiment_04.json`. Generated outputs are gitignored. The notebook also needs its two helper modules when run elsewhere; clone the repo rather than downloading only the notebook.
+The runner saves executed notebook outputs and a self-contained preview at `outputs/titanic.html`. It regenerates `submission.csv`, `submission_logistic_clean.csv`, `submission_forest_clean.csv`, `submission_03_gradient_boosting.csv`, `submission_04_random_forest_tuned.csv`, and `submission_05_logistic_regularized.csv` in the repo root, plus experiment metadata at `outputs/experiment_03.json`, `outputs/experiment_04.json`, and `outputs/experiment_05.json`. Generated outputs are gitignored. The notebook also needs its two helper modules when run elsewhere; clone the repo rather than downloading only the notebook.
 
 The original 80/20 holdout has already been examined, so it is a reused diagnostic. Model comparison uses identical stratified folds on the development portion. All learned preprocessing is fitted within each fold.
 
